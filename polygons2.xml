@@ -1,0 +1,30 @@
+<polygons>
+	<polygon>
+		<point x="160" y="210"></point>
+		<point x="220" y="270"></point>
+		<point x="280" y="210"></point>
+	</polygon>
+	<polygon>
+		<point x="330" y="170"></point>
+		<point x="275" y="320"></point>
+		<point x="380" y="370"></point>
+		<point x="350" y="320"></point> 
+		<point x="400" y="190"></point>
+	</polygon>
+	<polygon>
+		<point x="200" y="50"></point>
+		<point x="320" y="90"></point>
+		<point x="300" y="50"></point>
+	</polygon>
+	<polygon>
+		<point x="700" y="380"></point>
+		<point x="750" y="480"></point>
+		<point x="800" y="380"></point>
+	</polygon>
+	<polygon>
+		<point x="480" y="200"></point>
+		<point x="450" y="240"></point>
+		<point x="520" y="220"></point>
+		<point x="550" y="180"></point>
+	</polygon>
+</polygons>
