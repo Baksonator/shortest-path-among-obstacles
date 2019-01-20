@@ -46,8 +46,8 @@ var startPoint;
 var shortestPath = null;
 
 function preload() {
-	xml = loadXML('polygons4.xml');
-	xmlPoints = loadXML('points4.xml');
+	xml = loadXML('input/polygons4.xml');
+	xmlPoints = loadXML('input/points4.xml');
 }
 
 function setup() {
