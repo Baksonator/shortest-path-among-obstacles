@@ -14,8 +14,8 @@ Given a set of disjoint polygons, a start point p, and an end point q, compute t
 
 It is clear (and it can be shown) that the shortest path will definitely comprise of only the points p and q and some of the vertices of the polygons (if any). That means that we will move only from one vertex of a polygon to another (and the points p and q). Based on this conclusion, our plan is to make a map of roads in our plane, more precisely a map on which we will have roads between points that "see" each other (are visible to one another, a line can be drawn that does not intersect any polygon). This map is called the Visibility Graph. It is an undirected graph (because if one point "sees" another, the same applies the other way around) where the vertices are the vertices of the polygons and p and q, and the edges are the edges of visibility, in other words, two vertices are connected if they "see" each other. It is important to note that two vertices of the same polygon always "see" each other. When we set the problem like this, it is clear that our solution is a subset of the Visibility Graph. Based on that, we come to this algorithm:
 
-**ShortestPath(S, P<sub>start</sub>, P<sub>goal</sub>)**
-*Input* - S is the set of polygons (obstacles), P<sub>start</sub> is the starting point, P<sub>goal</sub> is the end point
+**ShortestPath(S, P<sub>start</sub>, P<sub>goal</sub>)**  
+*Input* - S is the set of polygons (obstacles), P<sub>start</sub> is the starting point, P<sub>goal</sub> is the end point  
 *Output* - The shortest path and its length
 1. Calculate Visibility Graph
 2. Add a weight to each edge of the graph, the weight corresponds to the Euclidean distance between the points
@@ -25,8 +25,8 @@ It turns out that the complexity of thjis algorithm is O(n<sup>2</sup> * log n),
 
 Next, we describe the Visibility Graph algorithm:
 
-**VisibilityGraph(S)**
-*Input* - S is the set of polygons
+**VisibilityGraph(S)**  
+*Input* - S is the set of polygons  
 *Output* - Visibility graph
 1. Initialize a graph G = (V, E), where V (vertices) is the set of all vertices of S, and E (edges) is and empty set
 2. for v in V do
@@ -38,8 +38,8 @@ Here, the function VisibleVertices return all the vertices from set S which are 
 
 If we want to check only for one vertex w from S whether or not it is visible from some vertex p, there is nothing very smart that we can do about it, we have to check if the line p-w intersects any polygon from S by traversing through all the edges of each polygon. If we did it that way for every vertex, the complexity would be O(n<sup>3</sup>). However, it turns out that the information we gain by testing for one vertex can be used for testing for the others. What is a good way to process the vertices we are checking? The logical way is to test them in some kind of circular order around vertex p. Besides that, we will store a data structure that will help us to efficiently determine the visibility of each next vertex we come across. Vertex w is visible from p if the line p-w does not intersect the interior of any polygon. If we consider the half-line P from vertex p that passes through w, it is clear the if we can't see w from p, that means that the half-line P intersects an edge of a polygon before it reaches w. In order to test if this is the case, we do a binary search over the edges that P intersects (there is also another case where w is not visible, namely when p and w are vertices of the same polytgon and p-w passes through the interior of the polygon, we'll see later how we handle this). So, we process the vertices in circular order, we maintain a balanced binary search tree where we store the edges of polygons that P intersects. The ordering of the tree is as follows: the left-most leaf will be the edge of the polygon which P intersects first. This way, we can easily check whether there is an edge that P intersects before some vertex, we always check the first edge it intersects, the left-most leaf. Notice that because we process the vertices in circular order, we are actually constantly rotating the half-line P. This is like the plane sweep algorithm, the only difference being that this is a circular sweep. Next, we describe the ciruclar sweep:
 
-**VisibleVertices(p,S)**
-*Input* - p is the vertex we are testing for, S is the set of polygons
+**VisibleVertices(p,S)**  
+*Input* - p is the vertex we are testing for, S is the set of polygons  
 *Output* - The set of all obstacle vertices visible from p.
 1. Sort the obstacle vertices according to the clockwise angle that the halfline from p to each vertex makes with the positive x-axis. In case of ties, vertices closer to p should come before vertices farther from p
 2. Let P be the half-line starting at p, parallel to the positive x-axis. Find the edges of all polygons that P intersects (only the ones that it does not intersect in the vertex of some polygon) and store them in a balanced search tree T in the order in which they are intersected by ρ
@@ -53,8 +53,8 @@ If we want to check only for one vertex w from S whether or not it is visible fr
 
 This algorithm represents our circular sweep. The sweep begins from a half-line that it parallel to the positive x-axis and continues in clockwise direction. The function Visible tells us whether or not w<sub>i</sub> is visible. As we already mentioned, this means a search in T to see if the closes edge to p intersects the line defined p-w<sub>i</sub>. However, we have to be careful when the line defined p-w<sub>i</sub> contains other vertices, because the approach we just mentioned can give us the wrong answer. If there is a vertex on  p-w<sub>i</sub>, it can upset our check. Because of this, we have to be wary of all the vertices that are located on the line defined p-w<sub>i</sub> that are between p and w<sub>i</sub>. Luckily, the visibility of such vertices has already been determined in the algorithm, so we can find a way to determined the visibility of w<sub>i</sub> by looking at them. It is clear that if the vertex w<sub>i - 1</sub> is not visible, there is no way we can see vertex w<sub>i</sub>. On the other hand, if w<sub>i - 1</sub> is visible, there are two cases in which w<sub>i</sub> is not visible: either the whole line w<sub>i - 1</sub>-w<sub>i</sub> lies within the polygon of which w<sub>i - 1</sub> and w<sub>i</sub> are vertices of, or the line w<sub>i - 1</sub>-w<sub>i</sub> intersects some edge from T. Having this in mind, we get the following function:
 
-**Visible(w<sub>i</sub>)**
-*Input* - w<sub>i</sub> is the vertex we are testing
+**Visible(w<sub>i</sub>)**  
+*Input* - w<sub>i</sub> is the vertex we are testing  
 *Output* - true or false
 1. if p-w<sub>i</sub> intersects the interior of any polygon of which w<sub>i</sub> is a vertex of
 2. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;return false
