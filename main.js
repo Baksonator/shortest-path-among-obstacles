@@ -1,3 +1,4 @@
+// Model classes for graph and edges
 class Graph {
 	constructor(noOfVertices) {
 		this.noOfVertices = noOfVertices;
@@ -24,6 +25,7 @@ class Edge {
 	}
 }
 
+// AVL tree is used as balanced binary search tree of intersected edges
 var avlTree = new AvlTree(compareEdges);
 
 var xml;
@@ -45,11 +47,13 @@ var lastMin = null;
 var startPoint;
 var shortestPath = null;
 
+// Load the data
 function preload() {
 	xml = loadXML('input/polygons3.xml');
 	xmlPoints = loadXML('input/points3.xml');
 }
 
+// Setup the visuals, initialize the Graph, initialize all vertices
 function setup() {
 	noLoop();
 	createCanvas(10000, 10000);
@@ -129,6 +133,7 @@ function setup() {
 
 }
 
+// Function that draws the visuals every time something changes
 function draw() {
 	clear();
 	background('rgba(0,255,0, 0.25)');
